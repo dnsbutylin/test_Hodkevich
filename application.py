@@ -31,22 +31,13 @@ class Application:
         chrome_options.add_experimental_option('prefs', prefs)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.implicitly_wait(TIME_TO_WAIT)
-
-        # Создайте Logger
+        # Настройки логера
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.DEBUG)
-
-        # Создайте обработчик для записи данных в файл
         logger_handler = logging.FileHandler('python_logging.log')
         logger_handler.setLevel(logging.INFO)
-
-        # Создайте Formatter для форматирования сообщений в логе
         logger_formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-
-        # Добавьте Formatter в обработчик
         logger_handler.setFormatter(logger_formatter)
-
-        # Добавьте обработчик в Logger
         self.logger.addHandler(logger_handler)
 
 
