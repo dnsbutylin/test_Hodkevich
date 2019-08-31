@@ -51,8 +51,9 @@ class Application:
         self.logger.info('Click delete')
         try:
             driver.find_element_by_css_selector(
-                "div.b-toolbar__btn.b-toolbar__btn_invert.b-toolbar__btn_data-remove.b-toolbar__btn_grouped.b-toolbar__btn"
-                "_grouped_first.b-toolbar__btn_grouped_last > span.b-toolbar__btn__text.b-toolbar__btn__text_pad").click()
+                "div.b-toolbar__btn.b-toolbar__btn_invert.b-toolbar__btn_data-remove.b-toolbar__btn_grouped.b-toolbar"
+                "__btn_grouped_first.b-toolbar__btn_grouped_last > span.b-toolbar__btn__text.b-toolbar"
+                "__btn__text_pad").click()
         except:
             self.logger.warning('Cannot click delete')
         self.logger.info('Confirm delete')
