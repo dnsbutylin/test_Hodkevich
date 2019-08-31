@@ -3,6 +3,9 @@ import hashlib
 import time
 import os, os.path, shutil
 import logging
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 PATH_TO_PICTURE = "C:\\Vg3bhs0RG1g.jpg"
 PICTURE_NAME = 'Vg3bhs0RG1g.jpg'
@@ -40,52 +43,63 @@ class Application:
         logger_handler.setFormatter(logger_formatter)
         self.logger.addHandler(logger_handler)
 
-
     def remove_picture(self, picture_name):
         driver = self.driver
         self.open_picture_page(picture_name)
         self.close_advertising()
         # Нажимаем удалить
         self.logger.info('Click delete')
-        driver.find_element_by_css_selector(
-            "div.b-toolbar__btn.b-toolbar__btn_invert.b-toolbar__btn_data-remove.b-toolbar__btn_grouped.b-toolbar__btn"
-            "_grouped_first.b-toolbar__btn_grouped_last > span.b-toolbar__btn__text.b-toolbar__btn__text_pad").click()
+        try:
+            driver.find_element_by_css_selector(
+                "div.b-toolbar__btn.b-toolbar__btn_invert.b-toolbar__btn_data-remove.b-toolbar__btn_grouped.b-toolbar__btn"
+                "_grouped_first.b-toolbar__btn_grouped_last > span.b-toolbar__btn__text.b-toolbar__btn__text_pad").click()
+        except:
+            self.logger.warning('Cannot click delete')
         self.logger.info('Confirm delete')
-        driver.find_element_by_xpath("//div[3]/div/button/span").click()  # Подтверждаем удаление
+        try:
+            driver.find_element_by_xpath("//div[3]/div/button/span").click()  # Подтверждаем удаление
+        except:
+            self.logger.warning('Cannot confirm delete')
         self.logger.info('Cleaninig folder for download')
         remove_folder_contents('C:\\Download_from_mailru')  # Зачистка содержимого папки
-        self.logger.info('Wait %s second' % str(TIME_TO_WAIT) )
-        time.sleep(TIME_TO_WAIT)
+
 
     def download_picture(self, picture_name):
         driver = self.driver
         self.open_picture_page(picture_name)
         self.close_advertising()
         if 'Download_from_mailru' not in os.listdir('C:\\'):
-            os.mkdir('Download_from_mailru')
-            self.logger.info('Create folder for download')
+            try:
+                os.mkdir('Download_from_mailru')
+                self.logger.info('Create folder for download')
+            except:
+                self.logger.error('Cannot create folder')
         else:
             self.logger.info('Folder for download exist')
         self.logger.info('Click download')
         driver.find_element_by_xpath("//div[2]/div/div/div/div/div/div/span").click()  # Нажимаем скачать
-        self.logger.info('Wait %s second' % str(TIME_TO_WAIT * 2))
-        time.sleep(TIME_TO_WAIT * 2)  # Ждем загрузку
+        while PICTURE_NAME not in os.listdir('C:\\Download_from_mailru'):  # Ожидаем пока не появится
+            pass
 
     def open_picture_page(self, picture_name):
         driver = self.driver
         self.logger.info('Open picture page')
-        driver.get('https://cloud.mail.ru/home/%s' % picture_name)  # Переходим на страницу с картинкой
+        try:
+            driver.get('https://cloud.mail.ru/home/%s' % picture_name)  # Переходим на страницу с картинкой
+        except:
+            self.logger.info('Cant go to page https://cloud.mail.ru/home/%s' % picture_name)
 
     def close_advertising(self):
         driver = self.driver
-        self.logger.info('Wait %s second' % str(TIME_TO_WAIT / 2))
-        time.sleep(TIME_TO_WAIT / 2)
-        if driver.find_elements_by_css_selector("svg.Dialog__close--1rKyk > path"):  # Если есть реклама
-            driver.find_element_by_css_selector("svg.Dialog__close--1rKyk > path").click()  # Нажимаем закрыть
-            self.logger.info('Close "svg.Dialog__close--1rKyk > path" adversing')
-        if driver.find_elements_by_css_selector("div.b-panel__close__icon"):  # Если есть реклама
-            driver.find_element_by_css_selector("div.b-panel__close__icon").click()  # НАжимаем закрыть
-            self.logger.info('Close "div.b-panel__close__icon" adversing')
+        try:
+            if driver.find_elements_by_css_selector("svg.Dialog__close--1rKyk > path"):  # Если есть реклама
+                driver.find_element_by_css_selector("svg.Dialog__close--1rKyk > path").click()  # Нажимаем закрыть
+                self.logger.info('Close "svg.Dialog__close--1rKyk > path" adversing')
+            if driver.find_elements_by_css_selector("div.b-panel__close__icon"):  # Если есть реклама
+                driver.find_element_by_css_selector("div.b-panel__close__icon").click()  # НАжимаем закрыть
+                self.logger.info('Close "div.b-panel__close__icon" adversing')
+        except:
+            self.logger.info('Not adversing is this page')
 
     def upload_picture(self, path_to_picture, action='replace'):
         '''Если есть файл с таким же именем, то по умолчанию метод заменяет его на новый
@@ -104,8 +118,6 @@ class Application:
         if driver.find_elements_by_xpath("//div[3]/button/span") and action == 'save_both':
             driver.find_element_by_xpath("//div[3]/button[2]/span").click()
             self.logger.info('Save both picture')
-        self.logger.info('Wait %s second' % str(TIME_TO_WAIT))
-        time.sleep(TIME_TO_WAIT)
 
     def switch_window(self, i):
         driver = self.driver
@@ -116,8 +128,13 @@ class Application:
         driver = self.driver
         # Кликаем по ссылке, со страницы mail.ru, переходим в облако
         self.logger.info('Open cloud page')
-        driver.find_element_by_css_selector("span.widget__ico.widget__ico_cloud").click()
-        self.switch_window(1)
+        time.sleep(5)
+        try:
+            driver.get('https://cloud.mail.ru/home')
+        except:
+            self.logger.error('Cannot get https://cloud.mail.ru/home')
+        #driver.find_element_by_css_selector("span.widget__ico.widget__ico_cloud").click()
+        #self.switch_window(1)
 
     def login(self, username, password):
         driver = self.driver
@@ -127,7 +144,6 @@ class Application:
         driver.find_element_by_id("mailbox:password").send_keys(password)  # Пароль
         self.logger.info('Confirm entry')
         driver.find_element_by_css_selector("input.o-control").click()  # Подтверждаем ввод
-        time.sleep(TIME_TO_WAIT)
 
     def open_mail_ru(self):
         driver = self.driver
