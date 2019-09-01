@@ -144,8 +144,6 @@ class Application:
             driver.get('https://cloud.mail.ru/home')
         except:
             self.logger.error('Cannot get https://cloud.mail.ru/home')
-
-
         #driver.find_element_by_css_selector("span.widget__ico.widget__ico_cloud").click()
         #self.switch_window(1)
 
