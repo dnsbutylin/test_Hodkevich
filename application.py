@@ -31,6 +31,8 @@ class Application:
     def __init__(self):
         chrome_options = webdriver.ChromeOptions()  # Меняем опции у браузера для скачивания файла в нужную директорию
         prefs = {'download.default_directory': 'C:\\Download_from_mailru\\'}  # Путь к директории для скачивания файла
+        chrome_options.add_argument('--start-maximized')#addArguments("start-maximized")
+        chrome_options.add_argument('disable-infobars')#addArguments("disable-infobars")
         chrome_options.add_experimental_option('prefs', prefs)
         self.driver = webdriver.Chrome(options=chrome_options)
         self.driver.implicitly_wait(TIME_TO_WAIT)
@@ -55,12 +57,12 @@ class Application:
                 "__btn_grouped_first.b-toolbar__btn_grouped_last > span.b-toolbar__btn__text.b-toolbar"
                 "__btn__text_pad").click()
         except:
-            self.logger.warning('Cannot click delete')
+            self.logger.error('Cannot click delete')
         self.logger.info('Confirm delete')
         try:
             driver.find_element_by_xpath("//div[3]/div/button/span").click()  # Подтверждаем удаление
         except:
-            self.logger.warning('Cannot confirm delete')
+            self.logger.error('Cannot confirm delete')
         self.logger.info('Cleaninig folder for download')
         remove_folder_contents('C:\\Download_from_mailru')  # Зачистка содержимого папки
 
@@ -99,6 +101,10 @@ class Application:
             if driver.find_elements_by_css_selector("div.b-panel__close__icon"):  # Если есть реклама
                 driver.find_element_by_css_selector("div.b-panel__close__icon").click()  # НАжимаем закрыть
                 self.logger.info('Close "div.b-panel__close__icon" adversing')
+            elif driver.find_elements_by_xpath(
+                "//div[@id='app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div"):
+                driver.find_element_by_xpath(
+                    "//div[@id='app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div").click()
         except:
             self.logger.info('Not adversing is this page')
 
@@ -129,11 +135,17 @@ class Application:
         driver = self.driver
         # Кликаем по ссылке, со страницы mail.ru, переходим в облако
         self.logger.info('Open cloud page')
-        time.sleep(5)
+        #time.sleep(5)
+        subscribe_checkbox = driver.find_element_by_css_selector("span.widget__ico.widget__ico_cloud")
+        wait = WebDriverWait(driver, 10)
+        result = wait.until(EC.element_selection_state_to_be(subscribe_checkbox, False))
+        self.logger.info(str(result))
         try:
             driver.get('https://cloud.mail.ru/home')
         except:
             self.logger.error('Cannot get https://cloud.mail.ru/home')
+
+
         #driver.find_element_by_css_selector("span.widget__ico.widget__ico_cloud").click()
         #self.switch_window(1)
 
