@@ -66,7 +66,6 @@ class Application:
         self.logger.info('Cleaninig folder for download')
         remove_folder_contents('C:\\Download_from_mailru')  # Зачистка содержимого папки
 
-
     def download_picture(self, picture_name):
         driver = self.driver
         self.open_picture_page(picture_name)
@@ -112,17 +111,17 @@ class Application:
         '''Если есть файл с таким же именем, то по умолчанию метод заменяет его на новый
         для сохраниния обоих файлов нужно указать action="save_both"'''
         driver = self.driver
-        self.logger.info('Click download button')
+        self.logger.info('Click upload button')
         driver.find_element_by_css_selector(
             "span.b-toolbar__btn__text.b-toolbar__btn__text_pad").click()  # Нажимаем кнопку загрузить
-        # Добавляем картинку (пришлось использовать xpath)
+        # Добавляем картинку
         self.logger.info('Upload picture')
         driver.find_element_by_xpath("//div[2]/div/input").send_keys(path_to_picture)
         # Если появилось диалоговое окно, выбираем действие в зависимости от указанного параметра
         if driver.find_elements_by_xpath("//div[3]/button/span") and action == 'replace':
             driver.find_element_by_xpath("//div[3]/button/span").click()
             self.logger.info('Replace picture')
-        if driver.find_elements_by_xpath("//div[3]/button/span") and action == 'save_both':
+        if driver.find_elements_by_xpath("//div[3]/button[2]/span") and action == 'save_both':
             driver.find_element_by_xpath("//div[3]/button[2]/span").click()
             self.logger.info('Save both picture')
 
