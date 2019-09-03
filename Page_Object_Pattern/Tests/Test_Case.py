@@ -23,7 +23,6 @@ class TestCase(EnvironmentSetUp):
         except:
             main.error("driver.get('https://mail.ru/') failed")
 
-
         try:
             authorization = AutorizationMailRuPage(driver) # Создаем экземпляр класса страницы авторизации
             authorization.set_username(USERNAME) # Вводим логин
