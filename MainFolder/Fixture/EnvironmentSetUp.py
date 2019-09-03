@@ -4,7 +4,7 @@ from selenium import webdriver
 
 
 class EnvironmentSetUp(unittest.TestCase):
-    
+
     def setUp(self):
         chrome_options = webdriver.ChromeOptions()  # Меняем опции у браузера для скачивания файла в нужную директорию
         prefs = {'download.default_directory': 'C:\\Download_from_mailru\\'}  # Путь к директории для скачивания файла

@@ -1,5 +1,5 @@
-from Page_Object_Pattern.Loger.Loger import *
-from Page_Object_Pattern.Locators import Locator
+from MainFolder.Tools.Loger import *
+from MainFolder.Locators import Locator
 from selenium.webdriver.common.by import By
 
 

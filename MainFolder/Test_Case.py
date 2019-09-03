@@ -1,15 +1,15 @@
 from selenium.webdriver.common.by import By
-from Page_Object_Pattern.Fixture.EnvironmentSetUp import EnvironmentSetUp
-from Page_Object_Pattern.Pages.AutorizationMailRuPage import AutorizationMailRuPage
-from Page_Object_Pattern.Pages.MailRuPage import MailRuPage
-from Page_Object_Pattern.Pages.CloudPage import CloudPage
-from Page_Object_Pattern.Pages.PicturePage import PicturePage
-from Page_Object_Pattern.Locators import Locator
+from MainFolder.Fixture.EnvironmentSetUp import EnvironmentSetUp
+from MainFolder.Pages.AutorizationMailRuPage import AutorizationMailRuPage
+from MainFolder.Pages.MailRuPage import MailRuPage
+from MainFolder.Pages.CloudPage import CloudPage
+from MainFolder.Pages.PicturePage import PicturePage
+from MainFolder.Locators import Locator
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Page_Object_Pattern.Tools.Tools import *
+from MainFolder.Tools.Tools import *
 import time
-from Page_Object_Pattern.Loger.Loger import *
+from MainFolder.Tools.Loger import *
 
 
 class TestCase(EnvironmentSetUp):
