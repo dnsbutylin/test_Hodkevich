@@ -1,7 +1,5 @@
 import os, os.path, shutil
 import hashlib
-from loger import *
-
 
 PATH_TO_PICTURE = "C:\\Vg3bhs0RG1g.jpg"
 PICTURE_NAME = 'Vg3bhs0RG1g.jpg'

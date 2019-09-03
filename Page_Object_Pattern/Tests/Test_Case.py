@@ -1,28 +1,28 @@
 from selenium.webdriver.common.by import By
-from EnvironmentSetUp import EnvironmentSetUp
-from AutorizationMailRuPage import AutorizationMailRuPage
-from MailRuPage import MailRuPage
-from CloudPage import CloudPage
-from PicturePage import PicturePage
-from Locators import Locator
+from Page_Object_Pattern.Fixture.EnvironmentSetUp import EnvironmentSetUp
+from Page_Object_Pattern.Pages.AutorizationMailRuPage import AutorizationMailRuPage
+from Page_Object_Pattern.Pages.MailRuPage import MailRuPage
+from Page_Object_Pattern.Pages.CloudPage import CloudPage
+from Page_Object_Pattern.Pages.PicturePage import PicturePage
+from Page_Object_Pattern.Locators import Locator
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from Tools import *
+from Page_Object_Pattern.Tools.Tools import *
 import time
-from loger import *
+from Page_Object_Pattern.Loger.Loger import *
 
 
 class TestCase(EnvironmentSetUp):
 
     def test_upload_download_remove_picture(self):
-
         driver = self.driver
+        driver.set_page_load_timeout(20)
         try:
             main.info('Go to https://mail.ru/')
             driver.get('https://mail.ru/')
         except:
             main.error("driver.get('https://mail.ru/') failed")
-        driver.set_page_load_timeout(5)
+
 
         try:
             authorization = AutorizationMailRuPage(driver) # Создаем экземпляр класса страницы авторизации

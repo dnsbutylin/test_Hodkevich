@@ -1,5 +1,3 @@
-from Tools import *
-
 
 class Locator(object):
     # Локаторы страницы авторизации

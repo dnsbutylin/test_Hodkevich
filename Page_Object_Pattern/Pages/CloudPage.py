@@ -1,7 +1,6 @@
-from loger import *
-from Locators import Locator
+from Page_Object_Pattern.Locators import Locator
 from selenium.webdriver.common.by import By
-from Tools import *
+from Page_Object_Pattern.Loger.Loger import *
 
 
 class CloudPage(object):
