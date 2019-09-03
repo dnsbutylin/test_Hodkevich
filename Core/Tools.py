@@ -1,7 +1,7 @@
 import os, os.path, shutil
 import hashlib
 
-PATH_TO_PICTURE = "C:\\Vg3bhs0RG1g.jpg"
+#PATH_TO_PICTURE = "C:\\Vg3bhs0RG1g.jpg"
 PICTURE_NAME = 'Vg3bhs0RG1g.jpg'
 USERNAME = 'testaccount.2000'
 PASSWORD = 'qwe321!qwe'

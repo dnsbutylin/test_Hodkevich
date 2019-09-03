@@ -1,10 +1,10 @@
-from MainFolder.Pages.AutorizationMailRuPage import AutorizationMailRuPage
-from MainFolder.Pages.MailRuPage import MailRuPage
-from MainFolder.Pages.CloudPage import CloudPage
-from MainFolder.Pages.PicturePage import PicturePage
+from Pages.AutorizationMailRuPage import AutorizationMailRuPage
+from Pages.MailRuPage import MailRuPage
+from Pages.CloudPage import CloudPage
+from Pages.PicturePage import PicturePage
 from selenium import webdriver
-from MainFolder.Core.Tools import *
-from MainFolder.Core.Loger import *
+from Core.Tools import *
+from Core.Loger import *
 import unittest
 
 
@@ -42,11 +42,12 @@ class TestCase(unittest.TestCase):
             self.driver.get('https://cloud.mail.ru/home') # Переходим на страницу облака
         except:
             log.error('did not go to the https://cloud.mail.ru/home page')
-        old_hesh = (md5(PATH_TO_PICTURE)) # Получаем хеш картинки до загрузки
+        old_hesh = (md5(PICTURE_NAME)) # Получаем хеш картинки до загрузки
         cloud = CloudPage(driver) # Создаем экземпляр класса страницы облака
         try:
             cloud.click_upload_button() # Кликаем по кнопке загрузкить
-            cloud.upload_picture(PATH_TO_PICTURE) # Загружаем картинку
+            dir = os.path.abspath(os.curdir) # Получаем текущую директорию
+            cloud.upload_picture(dir + '\\' + PICTURE_NAME) # Загружаем картинку
             if cloud.check_replace_button_exist(): # Если паявилась кнопка заменить?
                 cloud.click_replace_button() # Кликаем заменить
         except:
