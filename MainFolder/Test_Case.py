@@ -1,18 +1,22 @@
-from selenium.webdriver.common.by import By
-from MainFolder.Fixture.EnvironmentSetUp import EnvironmentSetUp
 from MainFolder.Pages.AutorizationMailRuPage import AutorizationMailRuPage
 from MainFolder.Pages.MailRuPage import MailRuPage
 from MainFolder.Pages.CloudPage import CloudPage
 from MainFolder.Pages.PicturePage import PicturePage
-from MainFolder.Core.Locators import Locator
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from selenium import webdriver
 from MainFolder.Core.Tools import *
-import time
 from MainFolder.Core.Loger import *
+import unittest
 
 
-class TestCase(EnvironmentSetUp):
+class TestCase(unittest.TestCase):
+
+    def setUp(self):
+        chrome_options = webdriver.ChromeOptions()  # Меняем опции у браузера для скачивания файла в нужную директорию
+        prefs = {'download.default_directory': 'C:\\Download_from_mailru\\'}  # Путь к директории для скачивания файла
+        chrome_options.add_argument('--start-maximized')
+        chrome_options.add_experimental_option('prefs', prefs)
+        self.driver = webdriver.Chrome(options=chrome_options)
+        self.driver.implicitly_wait(6)
 
     def test_upload_download_remove_picture(self):
         driver = self.driver
@@ -22,7 +26,6 @@ class TestCase(EnvironmentSetUp):
             driver.get('https://mail.ru/')
         except:
             main.error("driver.get('https://mail.ru/') failed")
-
         try:
             authorization = AutorizationMailRuPage(driver) # Создаем экземпляр класса страницы авторизации
             authorization.set_username(USERNAME) # Вводим логин
@@ -33,13 +36,12 @@ class TestCase(EnvironmentSetUp):
 
         mailru = MailRuPage(driver) # Создаем экземпляр класса страницы mail.ru
         # Ждем пока не появиться кнопка "Перейти в облако"
-        WebDriverWait(driver, 10).until(EC.element_selection_state_to_be(mailru.on_cloud_page_button, False))
+        mailru.wait_animation()
         try:
             main.info('Go to https://cloud.mail.ru/home')
             self.driver.get('https://cloud.mail.ru/home') # Переходим на страницу облака
         except:
             main.error('did not go to the https://cloud.mail.ru/home page')
-
         old_hesh = (md5(PATH_TO_PICTURE)) # Получаем хеш картинки до загрузки
         cloud = CloudPage(driver) # Создаем экземпляр класса страницы облака
         try:
@@ -49,15 +51,8 @@ class TestCase(EnvironmentSetUp):
                 cloud.click_replace_button() # Кликаем заменить
         except:
             main.error('not uploaded picture')
-
         # Каждую секунду проверяем завершилась ли загрузка (Максимум 5 сек)
-        i = 0
-        while i <= 5:
-            while self.driver.find_element(By.CSS_SELECTOR, Locator.check_upload_locator).text != "Загрузка завершена":
-                time.sleep(1)
-                i += 1
-            else:
-                i += 1
+        cloud.wait_upload(5)
         try:
             main.info('Open picture page')
             driver.get('https://cloud.mail.ru/home/%s' % PICTURE_NAME)  # Переходим на страницу с картинкой
@@ -78,25 +73,22 @@ class TestCase(EnvironmentSetUp):
                 main.error('Cannot create folder')
         else:
             main.info('Folder for download exist')
-
         picture.click_download_button() # Нажимаем кнопку загрузить
         # Каждую секунду проверяем не появилась ли картинка в загрузках
-        i = 0
-        while i <= 5:
-            while PICTURE_NAME not in os.listdir('C:\\Download_from_mailru'):  # Ожидаем пока не появится
-                time.sleep(1)
-                i += 1
-            else:
-                i += 1
-
+        picture.wait_download(5)
         new_hesh = (md5('C:\\Download_from_mailru\\' + PICTURE_NAME))  # Берем хеш картинки после загрузки
         assert old_hesh == new_hesh  # Сравниваем хеш до и после загруки
         picture.click_delete_button() # Нажимаем удалить
         picture.click_confirm_delete_button() # Подтверждаем удаление
+        remove_folder_contents('C:\\Download_from_mailru')  # Чистим содержимое папки
+
+    def tearDown(self):
+        self.driver.close()
+        self.driver.quit()
 
 
-
-
+if __name__ == "__main__":
+    unittest.main()
 
 
 

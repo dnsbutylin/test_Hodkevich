@@ -1,6 +1,7 @@
 from MainFolder.Core.Locators import Locator
 from selenium.webdriver.common.by import By
 from MainFolder.Core.Loger import *
+from MainFolder.Core.Tools import *
 
 
 class PicturePage():
@@ -45,6 +46,16 @@ class PicturePage():
             self.close_advertising1()
         if self.check_advertising2():
             self.close_advertising2()
+
+    def wait_download(self, second):
+        import time
+        i = 0
+        while i <= second:
+            while PICTURE_NAME not in os.listdir('C:\\Download_from_mailru'):  # Ожидаем пока не появится
+                time.sleep(1)
+                i += 1
+            else:
+                i += 1
 
 
 

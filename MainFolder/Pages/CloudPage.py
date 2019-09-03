@@ -33,6 +33,16 @@ class CloudPage(object):
         main.info('Save both pictures')
         self.driver.find_element(By.XPATH, Locator.save_both_button)
 
+    def wait_upload(self, second):
+        import time
+        i = 0
+        while i <= second:
+            while self.driver.find_element(By.CSS_SELECTOR, Locator.check_upload_locator).text != "Загрузка завершена":
+                time.sleep(1)
+                i += 1
+            else:
+                i += 1
+
 
 
 
