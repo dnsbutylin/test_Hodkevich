@@ -7,11 +7,15 @@ class CloudPage(object):
 
     def __init__(self, driver):
         self.driver = driver
+
+    def get_upload_button(self):
+        '''Присваиваем аттрибуту self.upload_button елементт и возвращаем это же значение в функцию'''
         self.upload_button = self.driver.find_element(By.XPATH, Locator.upload_button)
+        return self.driver.find_element(By.XPATH, Locator.upload_button)
 
     def click_upload_button(self):
         main.info('Click upload button')
-        self.upload_button.click()
+        self.driver.find_element(By.XPATH, Locator.upload_button).click()
 
     def upload_picture(self, path_to_picture):
         main.info('Upload picture')
