@@ -1,6 +1,6 @@
-from MainFolder.Locators import Locator
+from MainFolder.Core.Locators import Locator
 from selenium.webdriver.common.by import By
-from MainFolder.Tools.Loger import *
+from MainFolder.Core.Loger import *
 
 
 class PicturePage():

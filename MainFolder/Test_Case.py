@@ -4,12 +4,12 @@ from MainFolder.Pages.AutorizationMailRuPage import AutorizationMailRuPage
 from MainFolder.Pages.MailRuPage import MailRuPage
 from MainFolder.Pages.CloudPage import CloudPage
 from MainFolder.Pages.PicturePage import PicturePage
-from MainFolder.Locators import Locator
+from MainFolder.Core.Locators import Locator
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from MainFolder.Tools.Tools import *
+from MainFolder.Core.Tools import *
 import time
-from MainFolder.Tools.Loger import *
+from MainFolder.Core.Loger import *
 
 
 class TestCase(EnvironmentSetUp):
