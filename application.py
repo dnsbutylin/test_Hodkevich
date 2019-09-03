@@ -80,6 +80,7 @@ class Application:
             self.logger.info('Folder for download exist')
         self.logger.info('Click download')
         driver.find_element_by_xpath("//div[2]/div/div/div/div/div/div/span").click()  # Нажимаем скачать
+
         while PICTURE_NAME not in os.listdir('C:\\Download_from_mailru'):  # Ожидаем пока не появится
             pass
 
@@ -100,10 +101,10 @@ class Application:
             if driver.find_elements_by_css_selector("div.b-panel__close__icon"):  # Если есть реклама
                 driver.find_element_by_css_selector("div.b-panel__close__icon").click()  # НАжимаем закрыть
                 self.logger.info('Close "div.b-panel__close__icon" adversing')
-            elif driver.find_elements_by_xpath(
-                "//div[@id='app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div"):
-                driver.find_element_by_xpath(
-                    "//div[@id='app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div").click()
+            #elif driver.find_elements_by_xpath(
+            #    "//div[@id='app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div"):
+            #    driver.find_element_by_xpath(
+            #       "//div[@id='app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div").click()
         except:
             self.logger.info('Not adversing is this page')
 

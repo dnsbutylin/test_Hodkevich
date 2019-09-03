@@ -1,4 +1,4 @@
-
+from loger import *
 from Locators import Locator
 from selenium.webdriver.common.by import By
 
@@ -14,14 +14,18 @@ class AutorizationMailRuPage(object):
         self.mail_error_massege = driver.find_element(By.ID, Locator.mail_error_massege)
 
     def click_submit_button(self):
+        main.info('Confirm entry')
         self.submit_button.click()
 
     def get_mail_error_massege(self):
         return self.mail_error_massege.text
 
     def set_username(self, username):
+        main.info('Enter username')
         self.username.send_keys(username)
 
+
     def set_password(self, password):
+        main.info('Enter password')
         self.password.send_keys(password)
 
