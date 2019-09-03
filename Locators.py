@@ -21,7 +21,6 @@ class Locator(object):
     download_button = '//div[2]/div/div/div/div/div/div/span'
     close_advertising1 = 'svg.Dialog__close--1rKyk > path'
     close_advertising2 = 'div.b-panel__close__icon'
-    # adversiting3 = "//div[@id = 'app']/div[2]/div[36]/div/div/div/div/div/div/div/div/div/div"
 
     # Локаторы страницы mail.ru
     on_cloud_page_button = 'span.widget__ico.widget__ico_cloud'
