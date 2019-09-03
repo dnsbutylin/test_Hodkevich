@@ -22,26 +22,26 @@ class TestCase(unittest.TestCase):
         driver = self.driver
         driver.set_page_load_timeout(20)
         try:
-            main.info('Go to https://mail.ru/')
+            log.info('Go to https://mail.ru/')
             driver.get('https://mail.ru/')
         except:
-            main.error("driver.get('https://mail.ru/') failed")
+            log.error("driver.get('https://mail.ru/') failed")
         try:
             authorization = AutorizationMailRuPage(driver) # Создаем экземпляр класса страницы авторизации
             authorization.set_username(USERNAME) # Вводим логин
             authorization.set_password(PASSWORD) # Вводим пароль
             authorization.click_submit_button() # Подтверждаем ввод
         except:
-            main.error('Autorization failed')
+            log.error('Autorization failed')
 
         mailru = MailRuPage(driver) # Создаем экземпляр класса страницы mail.ru
         # Ждем пока не появиться кнопка "Перейти в облако"
         mailru.wait_animation()
         try:
-            main.info('Go to https://cloud.mail.ru/home')
+            log.info('Go to https://cloud.mail.ru/home')
             self.driver.get('https://cloud.mail.ru/home') # Переходим на страницу облака
         except:
-            main.error('did not go to the https://cloud.mail.ru/home page')
+            log.error('did not go to the https://cloud.mail.ru/home page')
         old_hesh = (md5(PATH_TO_PICTURE)) # Получаем хеш картинки до загрузки
         cloud = CloudPage(driver) # Создаем экземпляр класса страницы облака
         try:
@@ -50,29 +50,29 @@ class TestCase(unittest.TestCase):
             if cloud.check_replace_button_exist(): # Если паявилась кнопка заменить?
                 cloud.click_replace_button() # Кликаем заменить
         except:
-            main.error('not uploaded picture')
+            log.error('not uploaded picture')
         # Каждую секунду проверяем завершилась ли загрузка (Максимум 5 сек)
         cloud.wait_upload(5)
         try:
-            main.info('Open picture page')
+            log.info('Open picture page')
             driver.get('https://cloud.mail.ru/home/%s' % PICTURE_NAME)  # Переходим на страницу с картинкой
         except:
-            main.info('Cant go to page https://cloud.mail.ru/home/%s' % PICTURE_NAME)
+            log.info('Cant go to page https://cloud.mail.ru/home/%s' % PICTURE_NAME)
 
         picture = PicturePage(driver) # Создаем экземпляр класса страницы картинки
         try:
             picture.close_advertising() # Закрываем рекламу
         except:
-            main.error('Advertising did not close')
+            log.error('Advertising did not close')
         # Создаем папку C:\Download_from_mailru, если её нет
         if 'Download_from_mailru' not in os.listdir('C:\\'):
             try:
                 os.mkdir('Download_from_mailru')
-                main.info('Create folder for download')
+                log.info('Create folder for download')
             except:
-                main.error('Cannot create folder')
+                log.error('Cannot create folder')
         else:
-            main.info('Folder for download exist')
+            log.info('Folder for download exist')
         picture.click_download_button() # Нажимаем кнопку загрузить
         # Каждую секунду проверяем не появилась ли картинка в загрузках
         picture.wait_download(5)
@@ -84,7 +84,6 @@ class TestCase(unittest.TestCase):
 
     def tearDown(self):
         self.driver.close()
-        self.driver.quit()
 
 
 if __name__ == "__main__":
